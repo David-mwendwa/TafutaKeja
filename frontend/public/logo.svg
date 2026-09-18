@@ -1,0 +1,37 @@
+<!-- TafutaKeja mark: a roofline over a door, with the lens that does the looking.
+
+     Geometry notes, because they are easy to undo by "tidying":
+     the roof apex sits at y=9 and the eaves at y=26 so the pitch stays around
+     40 degrees. Flatten it and the silhouette stops reading as a roof at 16px.
+     The lens is r=7 on a 48 grid and overlaps the house corner rather than
+     sitting beside it: at favicon size the two shapes merge into one mass, and
+     a lens floating clear of the house reads as a speck of dirt. Its brass is
+     the only secondary-colour use in the mark, and it carries a navy rim so the
+     circle still closes where it crosses the white wall. -->
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 48 48" fill="none">
+  <rect width="48" height="48" rx="11" fill="#314e7f" />
+  <path
+    d="M24 9 6.5 24.5v1.2a2 2 0 0 0 3.3 1.5L24 14.8l14.2 12.4a2 2 0 0 0 3.3-1.5v-1.2L24 9Z"
+    fill="#ffffff"
+  />
+  <path
+    d="M11.5 26.2 24 15.3l12.5 10.9V38a2 2 0 0 1-2 2h-21a2 2 0 0 1-2-2V26.2Z"
+    fill="#ffffff"
+    fill-opacity="0.92"
+  />
+  <path d="M20 40V31.5a4 4 0 0 1 8 0V40h-8Z" fill="#314e7f" fill-opacity="0.28" />
+  <path
+    d="m33.2 33.2 5.1 5.1"
+    stroke="#314e7f"
+    stroke-width="6.4"
+    stroke-linecap="round"
+  />
+  <path
+    d="m33.4 33.4 4.9 4.9"
+    stroke="#c9862c"
+    stroke-width="3.6"
+    stroke-linecap="round"
+  />
+  <circle cx="28.8" cy="28.8" r="8.6" fill="#314e7f" />
+  <circle cx="28.8" cy="28.8" r="6.6" fill="none" stroke="#c9862c" stroke-width="3.2" />
+</svg>

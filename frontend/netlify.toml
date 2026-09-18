@@ -1,0 +1,119 @@
+# Netlify deploys the frontend only. The Express API lives on Render — see
+# render.yaml. Set VITE_API_URL in the Netlify UI (Site configuration →
+# Environment variables) to the Render service URL plus /api/v1; without it the
+# build falls back to the localhost default in src/api/apiClient.js, and every
+# request from the deployed site fails.
+
+[build]
+  base = "frontend"
+  command = "npm ci && npm run build"
+  publish = "dist"
+  # Stated rather than left to the default: `base` moves the root Netlify
+  # resolves paths against, so the conventional repo-root netlify/ directory is
+  # not where this build looks.
+  edge_functions = "netlify/edge-functions"
+
+[build.environment]
+  NODE_VERSION = "22"
+
+# Client-side routing: every unmatched path is served by the SPA shell.
+#
+# `/app.html`, NOT `/index.html`. The build prerenders each public route to its
+# own file, so index.html is the home page — pointing the fallback there would
+# serve the home page's markup and its rel=canonical for every listing URL,
+# telling a crawler that every property page is a duplicate of the home page.
+# app.html is the empty shell with no canonical; the route writes its own tags
+# once it mounts.
+#
+# Must stay last so real files (the prerendered routes and /assets/*) win first
+# — the rule is deliberately not `force = true`.
+[[redirects]]
+  from = "/*"
+  to = "/app.html"
+  status = 200
+
+[[headers]]
+  for = "/*"
+  [headers.values]
+    X-Content-Type-Options = "nosniff"
+    X-Frame-Options = "DENY"
+    Referrer-Policy = "strict-origin-when-cross-origin"
+    Permissions-Policy = "camera=(), microphone=(), geolocation=()"
+
+# The signed-in areas. These are client-rendered, so a crawler never runs the
+# JavaScript that would set a meta robots tag — the header is what actually
+# keeps them out of an index.
+#
+# Note what is NOT here: /listing/* and /listings. Those are the payload, and a
+# blanket rule over them would stop a crawler ever reading the per-listing
+# noindex that a let or sold property asks for.
+# `/saved` and `/saved/*` are two different rules to Netlify: the splat matches
+# what is *under* the path, not the path itself, so the bare route — which is
+# the one the app actually serves — would carry no header at all. Every guarded
+# area is listed both ways, the tree only where the app has children there.
+[[headers]]
+  for = "/saved"
+  [headers.values]
+    X-Robots-Tag = "noindex, nofollow"
+
+[[headers]]
+  for = "/enquiries"
+  [headers.values]
+    X-Robots-Tag = "noindex, nofollow"
+
+[[headers]]
+  for = "/enquiries/*"
+  [headers.values]
+    X-Robots-Tag = "noindex, nofollow"
+
+[[headers]]
+  for = "/profile"
+  [headers.values]
+    X-Robots-Tag = "noindex, nofollow"
+
+[[headers]]
+  for = "/agent"
+  [headers.values]
+    X-Robots-Tag = "noindex, nofollow"
+
+[[headers]]
+  for = "/agent/*"
+  [headers.values]
+    X-Robots-Tag = "noindex, nofollow"
+
+[[headers]]
+  for = "/admin"
+  [headers.values]
+    X-Robots-Tag = "noindex, nofollow"
+
+[[headers]]
+  for = "/admin/*"
+  [headers.values]
+    X-Robots-Tag = "noindex, nofollow"
+
+# Only ever reached as /password/forgot or /password/reset/<token>, so the
+# tree rule is the whole story here.
+[[headers]]
+  for = "/password/*"
+  [headers.values]
+    X-Robots-Tag = "noindex, nofollow"
+
+# Vite fingerprints everything under /assets, so it can be cached forever.
+[[headers]]
+  for = "/assets/*"
+  [headers.values]
+    Cache-Control = "public, max-age=31536000, immutable"
+
+# Every route is prerendered to its own HTML file and the contents change with
+# the catalogue, so none may be held by a browser cache.
+[[headers]]
+  for = "/*.html"
+  [headers.values]
+    Cache-Control = "no-store, must-revalidate"
+
+# The self-hosted faces change only when a font file is deliberately replaced,
+# and every page blocks its first text on one of them.
+[[headers]]
+  for = "/fonts/*"
+  [headers.values]
+    Cache-Control = "public, max-age=31536000, immutable"

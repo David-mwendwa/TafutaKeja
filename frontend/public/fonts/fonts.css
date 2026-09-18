@@ -1,0 +1,35 @@
+/* Self-hosted latin subsets. Never reinstate a Google Fonts @import or <link>:
+   loading type from Google puts two further cross-origin round trips (a
+   stylesheet from googleapis, then the files from gstatic) between the document
+   and the first glyph, and render blocks for the whole chain. Served from our
+   own origin the connection is already open and warm from the document itself.
+
+   Both families here are variable, so each ships as ONE file carrying a weight
+   range. Declaring a @font-face per weight would send the same bytes several
+   times over — Google's 400 and 700 URLs resolve to the same file, and the
+   browser has no way to tell two identical downloads apart. Check before
+   copying this pattern: a family that is not variable (Chakra Petch, for one)
+   needs a rule per weight, or the browser synthesises the ones it was not
+   given. */
+
+@font-face {
+  font-family: 'Inter';
+  font-style: normal;
+  font-weight: 100 900;
+  font-display: swap;
+  src: url(/fonts/Inter.woff2) format('woff2');
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA,
+    U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193,
+    U+2212, U+2215, U+FEFF, U+FFFD;
+}
+
+@font-face {
+  font-family: 'Manrope';
+  font-style: normal;
+  font-weight: 200 800;
+  font-display: swap;
+  src: url(/fonts/Manrope.woff2) format('woff2');
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA,
+    U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193,
+    U+2212, U+2215, U+FEFF, U+FFFD;
+}

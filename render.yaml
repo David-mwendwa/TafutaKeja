@@ -1,0 +1,26 @@
+# The Express API. The frontend deploys separately to Netlify — see
+# frontend/netlify.toml.
+services:
+  - type: web
+    name: tafutakeja-api
+    runtime: node
+    plan: free
+    region: frankfurt
+    rootDir: backend
+    buildCommand: npm ci
+    startCommand: node server.js
+    healthCheckPath: /api/v1/health
+    envVars:
+      - key: NODE_ENV
+        value: production
+      # Set in the Render dashboard, not here:
+      #   DATABASE_URL   the Atlas connection string
+      #   JWT_SECRET     a long random string
+      - key: DATABASE_URL
+        sync: false
+      - key: JWT_SECRET
+        sync: false
+      - key: FRONTEND_URL
+        value: https://tafutakeja.netlify.app
+      - key: PROD_FRONTEND_URL
+        value: https://tafutakeja.netlify.app

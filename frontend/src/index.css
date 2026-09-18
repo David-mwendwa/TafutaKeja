@@ -1,0 +1,359 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --font-sans: 'Inter';
+  --font-heading: 'Manrope';
+  /* One definition of the header's height, so the sidebar's sticky offset and
+     the header itself cannot drift apart. */
+  --header-h: 4.5rem;
+  /* Trillo's hairline. One token so the frame, the header, the overview bar
+     and every panel divider are demonstrably the same line. */
+  --line: 1px solid theme('colors.dark.200');
+  /* The amenity-list bullet, carried as a mask so it takes the accent colour
+     from `background-color` rather than needing a fill per instance. */
+  --chevron: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 20 20'%3E%3Cpath d='M13.25 10l-7.141-7.42c-0.268-0.27-0.268-0.707 0-0.979 0.268-0.27 0.701-0.27 0.969 0l7.83 7.908c0.268 0.271 0.268 0.709 0 0.979l-7.83 7.908c-0.268 0.271-0.701 0.27-0.969 0s-0.268-0.707 0-0.979l7.141-7.417z'/%3E%3C/svg%3E");
+}
+
+.dark {
+  --line: 1px solid theme('colors.dark.800');
+}
+
+@layer base {
+  /*
+   * Reserve the scrollbar's width whether or not the page is long enough to
+   * need one. Without it the frame, which is centred, sits a few pixels further
+   * left on any page tall enough to scroll than on one that is not, so moving
+   * between them nudges the whole layout sideways.
+   */
+  html {
+    scrollbar-gutter: stable;
+  }
+
+  html {
+    scroll-behavior: smooth;
+    /* The header scrolls away with the frame rather than sticking, so an
+       anchor jump only needs to clear its own breathing room. */
+    scroll-padding-top: 1rem;
+  }
+
+  /*
+   * The app sits in a window on a coloured ground — Trillo's framing, in the
+   * harbour navy rather than its pink. `fixed` attachment keeps the gradient
+   * still while the frame scrolls over it, which is what makes the frame read
+   * as a window rather than a very wide card.
+   */
+  body {
+    @apply bg-primary-800 font-sans text-dark-900 antialiased;
+    background-image: linear-gradient(
+      to right bottom,
+      theme('colors.primary.800'),
+      theme('colors.primary.950')
+    );
+    background-attachment: fixed;
+    min-height: 100vh;
+  }
+
+  .dark body {
+    @apply text-dark-100;
+    background-image: linear-gradient(
+      to right bottom,
+      theme('colors.primary.950'),
+      theme('colors.dark.950')
+    );
+  }
+
+  h1, h2, h3, h4 {
+    @apply font-heading font-bold tracking-tight;
+  }
+
+  /* Focus rings are the whole keyboard story on a site that is mostly links
+     and filter chips, so they are defined once here rather than per component. */
+  :focus-visible {
+    @apply outline-none ring-2 ring-primary-500 ring-offset-2 ring-offset-dark-50;
+  }
+
+  .dark :focus-visible {
+    @apply ring-offset-dark-950;
+  }
+}
+
+@layer components {
+  .btn {
+    @apply inline-flex items-center justify-center gap-2 rounded-lg px-4 py-2.5 text-sm
+           font-semibold transition-colors disabled:cursor-not-allowed disabled:opacity-60;
+  }
+  .btn-primary {
+    @apply btn bg-primary-700 text-white hover:bg-primary-800;
+  }
+  .btn-secondary {
+    @apply btn bg-secondary-500 text-dark-950 hover:bg-secondary-400;
+  }
+  .btn-outline {
+    @apply btn border border-dark-300 bg-white text-dark-800 hover:bg-dark-100
+           dark:border-dark-700 dark:bg-dark-900 dark:text-dark-100 dark:hover:bg-dark-800;
+  }
+  .btn-ghost {
+    @apply btn text-dark-700 hover:bg-dark-100 dark:text-dark-200 dark:hover:bg-dark-800;
+  }
+
+  .card {
+    @apply rounded-xl border border-dark-200 bg-white shadow-card
+           dark:border-dark-800 dark:bg-dark-900;
+  }
+
+  .field {
+    @apply w-full rounded-lg border-dark-300 bg-white text-dark-900 shadow-sm
+           placeholder:text-dark-400 focus:border-primary-500 focus:ring-primary-500
+           dark:border-dark-700 dark:bg-dark-900 dark:text-dark-100;
+  }
+
+  .label {
+    @apply mb-1.5 block text-sm font-medium text-dark-700 dark:text-dark-300;
+  }
+
+  /*
+   * An action shown as its icon. The label lives in `aria-label` and in the
+   * tooltip below, which appears on focus as well as hover: an action a
+   * keyboard user can reach but cannot read is not an accessible action.
+   */
+  .icon-btn {
+    @apply relative inline-grid h-9 w-9 shrink-0 place-items-center rounded-lg border
+           border-dark-200 bg-white text-dark-600 transition-colors
+           hover:border-primary-400 hover:text-primary-700
+           disabled:cursor-not-allowed disabled:opacity-50 disabled:hover:border-dark-200
+           dark:border-dark-700 dark:bg-dark-900 dark:text-dark-300
+           dark:hover:border-primary-600 dark:hover:text-primary-300;
+  }
+  .icon-btn--primary {
+    @apply border-primary-700 bg-primary-700 text-white
+           hover:border-primary-800 hover:bg-primary-800 hover:text-white;
+  }
+  .icon-btn--danger {
+    @apply text-red-700 hover:border-red-300 hover:bg-red-50 hover:text-red-800
+           dark:text-red-400 dark:hover:border-red-800 dark:hover:bg-red-950 dark:hover:text-red-300;
+  }
+
+  .icon-btn__tip {
+    @apply pointer-events-none absolute bottom-full left-1/2 z-30 mb-1.5 -translate-x-1/2
+           whitespace-nowrap rounded-md bg-dark-900 px-2 py-1 text-xs font-medium text-white
+           opacity-0 shadow-card transition-opacity duration-150
+           dark:bg-dark-700;
+  }
+  .icon-btn:hover .icon-btn__tip,
+  .icon-btn:focus-visible .icon-btn__tip {
+    @apply opacity-100;
+  }
+
+  /*
+   * A tooltip is a promise you can hover, and a touch screen cannot. Rather
+   * than leaving a phone with a row of unlabelled glyphs, the label steps out
+   * of the tooltip and sits beside the icon wherever hover does not exist.
+   * The icon is still the thing carrying the meaning; the words stop it being
+   * a guess on the one device that cannot ask.
+   */
+  @media (hover: none) {
+    .icon-btn {
+      @apply w-auto grid-flow-col gap-1.5 px-2.5 text-xs font-semibold;
+    }
+    .icon-btn__tip {
+      @apply static mb-0 translate-x-0 rounded-none bg-transparent p-0 text-xs
+             font-semibold text-current opacity-100 shadow-none dark:bg-transparent;
+    }
+  }
+
+  .chip {
+    @apply inline-flex items-center gap-1.5 rounded-full border border-dark-200 bg-white
+           px-3 py-1 text-xs font-medium text-dark-700 transition-colors
+           hover:border-primary-400 dark:border-dark-700 dark:bg-dark-900 dark:text-dark-300;
+  }
+  .chip-active {
+    @apply border-primary-600 bg-primary-700 text-white hover:border-primary-600
+           dark:border-primary-600 dark:bg-primary-700 dark:text-white;
+  }
+
+  /* The skeleton a card shows while the API wakes up. */
+  .skeleton {
+    @apply animate-shimmer rounded bg-dark-200 dark:bg-dark-800;
+    background-image: linear-gradient(
+      90deg,
+      transparent 0,
+      rgba(255, 255, 255, 0.35) 50%,
+      transparent 100%
+    );
+    background-size: 1000px 100%;
+  }
+}
+
+/* Leaflet ships its own stylesheet, but two of its defaults fight this design:
+   a white attribution bar with no rounding, and z-indexes high enough to sit
+   over the sticky header. Both are corrected here rather than by loading a
+   patched copy of the library's CSS. */
+.leaflet-container {
+  @apply z-0 rounded-xl font-sans;
+}
+.leaflet-control-attribution {
+  @apply rounded-tl-lg bg-white/85 text-[10px] text-dark-600;
+}
+
+@layer components {
+  /*
+   * The window the whole app lives in.
+   *
+   * Floats clear of the gradient only when the viewport is wide enough for the
+   * ground to read as a border rather than a stripe; below that it goes
+   * full-bleed and the gradient is never seen, which is Trillo's own
+   * behaviour and the reason the frame does not cost a phone any width.
+   */
+  .app-frame {
+    @apply mx-auto w-full bg-dark-50 shadow-frame dark:bg-dark-950;
+    max-width: 1400px;
+    min-height: 100vh;
+  }
+
+  @media (min-width: 1500px) {
+    .app-frame {
+      margin-block: 3rem;
+      /* Still tall enough to fill the viewport, less the ground it floats on
+         here — otherwise a short page leaves the frame a stub in mid-air. */
+      min-height: calc(100vh - 6rem);
+      border-radius: 0.25rem;
+    }
+  }
+
+  /*
+   * Trillo's side-nav accent: a 3px bar that scales up from nothing, then
+   * sweeps across the item to become its background. The two halves are one
+   * transition on different properties with a delay between them — the sweep
+   * cannot start until the bar exists, which is what makes it read as one
+   * gesture rather than two animations.
+   */
+  .side-nav-item {
+    @apply relative;
+  }
+
+  .side-nav-item::before {
+    content: '';
+    /* 600, not 500: once the bar has swept across, the item's own white label
+       sits on top of it, and 500 leaves that at 4.41:1 — just under the 4.5
+       a 14px semibold label needs. */
+    @apply absolute left-0 top-0 h-full w-[3px] bg-primary-600;
+    transform: scaleY(0);
+    transition:
+      transform 0.2s,
+      width 0.4s cubic-bezier(1, 0, 0, 1) 0.2s,
+      background-color 0.1s;
+  }
+
+  .side-nav-item:hover::before,
+  .side-nav-item[data-active='true']::before {
+    transform: scaleY(1);
+    width: 100%;
+  }
+
+  .side-nav-item:active::before {
+    @apply bg-primary-500;
+  }
+
+  /* The label has to ride above the bar that sweeps under it. */
+  .side-nav-link {
+    @apply relative z-10 flex items-center gap-4 px-6 py-4 text-sm font-semibold
+           uppercase tracking-wide text-dark-100 transition-colors;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .side-nav-item::before {
+      transition: none;
+    }
+  }
+
+  /*
+   * The CTA that carries two faces: the invitation, and — on hover — what it
+   * actually costs you. Both spans are full-width children of an overflow
+   * hidden button, one parked above the top edge, so the pair slides as a unit.
+   */
+  .btn-slide {
+    @apply relative inline-block cursor-pointer overflow-hidden rounded-full border-0
+           font-heading text-sm font-bold uppercase tracking-wider text-white;
+    background-image: linear-gradient(
+      to right bottom,
+      theme('colors.primary.500'),
+      theme('colors.primary.800')
+    );
+  }
+
+  .btn-slide > * {
+    @apply inline-block h-full w-full transition-all duration-200;
+  }
+
+  .btn-slide__face {
+    @apply px-12 py-4;
+  }
+
+  .btn-slide__alt {
+    @apply absolute left-0 px-0 py-4;
+    top: -100%;
+  }
+
+  .btn-slide:hover {
+    background-image: linear-gradient(
+      to left,
+      theme('colors.primary.500'),
+      theme('colors.primary.800')
+    );
+  }
+
+  .btn-slide:hover .btn-slide__face {
+    transform: translateY(100%);
+  }
+
+  .btn-slide:hover .btn-slide__alt {
+    top: 0;
+  }
+
+  .btn-slide:focus-visible {
+    @apply animate-pulsate;
+  }
+
+  /* Trillo's underlined inline action, with the arrow that steps away on hover. */
+  .link-inline {
+    @apply inline-block cursor-pointer border-0 bg-transparent pb-0.5 text-sm font-semibold
+           text-primary-700 transition-colors dark:text-primary-300;
+    border-bottom: 1px solid currentColor;
+  }
+
+  .link-inline span {
+    @apply ml-1 inline-block transition-[margin-left] duration-200;
+  }
+
+  .link-inline:hover {
+    @apply text-dark-900 dark:text-white;
+  }
+
+  .link-inline:hover span {
+    @apply ml-2;
+  }
+
+  /*
+   * The two-column feature list, bulleted with a masked chevron rather than an
+   * inline SVG per row — one mask serves however many amenities a listing has,
+   * and it inherits the accent colour by being a background rather than a fill.
+   */
+  .list-chevron {
+    @apply grid grid-cols-1 gap-y-2 sm:grid-cols-2;
+  }
+
+  .list-chevron > li {
+    @apply flex items-start text-sm text-dark-700 dark:text-dark-300;
+  }
+
+  .list-chevron > li::before {
+    content: '';
+    @apply mr-2 mt-1 inline-block h-3.5 w-3.5 shrink-0 bg-primary-600 dark:bg-primary-400;
+    -webkit-mask-image: var(--chevron);
+    -webkit-mask-size: cover;
+    mask-image: var(--chevron);
+    mask-size: cover;
+  }
+}

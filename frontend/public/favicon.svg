@@ -1,0 +1,29 @@
+<!-- TafutaKeja mark, favicon copy. The geometry notes live in logo.svg;
+     the two files are the same drawing and must be changed together. -->
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 48 48" fill="none">
+  <rect width="48" height="48" rx="11" fill="#314e7f" />
+  <path
+    d="M24 9 6.5 24.5v1.2a2 2 0 0 0 3.3 1.5L24 14.8l14.2 12.4a2 2 0 0 0 3.3-1.5v-1.2L24 9Z"
+    fill="#ffffff"
+  />
+  <path
+    d="M11.5 26.2 24 15.3l12.5 10.9V38a2 2 0 0 1-2 2h-21a2 2 0 0 1-2-2V26.2Z"
+    fill="#ffffff"
+    fill-opacity="0.92"
+  />
+  <path d="M20 40V31.5a4 4 0 0 1 8 0V40h-8Z" fill="#314e7f" fill-opacity="0.28" />
+  <path
+    d="m33.2 33.2 5.1 5.1"
+    stroke="#314e7f"
+    stroke-width="6.4"
+    stroke-linecap="round"
+  />
+  <path
+    d="m33.4 33.4 4.9 4.9"
+    stroke="#c9862c"
+    stroke-width="3.6"
+    stroke-linecap="round"
+  />
+  <circle cx="28.8" cy="28.8" r="8.6" fill="#314e7f" />
+  <circle cx="28.8" cy="28.8" r="6.6" fill="none" stroke="#c9862c" stroke-width="3.2" />
+</svg>

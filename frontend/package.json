@@ -1,0 +1,43 @@
+{
+  "name": "frontend",
+  "private": true,
+  "version": "0.0.0",
+  "type": "module",
+  "engines": {
+    "node": ">=22 <25"
+  },
+  "scripts": {
+    "dev": "vite",
+    "build": "node scripts/check-classes.mjs && vite build && vite-node scripts/prerender.jsx && node scripts/verify-build.mjs",
+    "lint": "oxlint",
+    "preview": "vite preview",
+    "build:client": "vite build",
+    "prerender": "vite-node scripts/prerender.jsx",
+    "verify": "node scripts/verify-build.mjs",
+    "format": "prettier --write .",
+    "test": "node --test \"tests/*.test.mjs\"",
+    "check:classes": "node scripts/check-classes.mjs"
+  },
+  "dependencies": {
+    "leaflet": "^1.9.4",
+    "react": "^19.2.8",
+    "react-dom": "^19.2.8",
+    "react-leaflet": "^5.0.0",
+    "react-router-dom": "^7.18.3"
+  },
+  "devDependencies": {
+    "@tailwindcss/forms": "^0.5.11",
+    "@tailwindcss/typography": "^0.5.20",
+    "@types/react": "^19.2.18",
+    "@types/react-dom": "^19.2.7",
+    "@vitejs/plugin-react": "^6.1.1",
+    "autoprefixer": "^10.5.6",
+    "oxlint": "^1.81.0",
+    "postcss": "^8.5.28",
+    "prettier": "^3.9.6",
+    "prettier-plugin-tailwindcss": "^0.8.1",
+    "tailwindcss": "^3.4.19",
+    "vite": "^8.3.0",
+    "vite-node": "^6.0.0"
+  }
+}

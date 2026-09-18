@@ -1,0 +1,37 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="icon" type="image/svg+xml" href="/logo.svg" />
+    <meta name="theme-color" content="#2c4267" />
+
+    <!-- Self-hosted type, not Google Fonts. Loading type from Google puts two
+         further cross-origin round trips between the document and the first
+         glyph, all of it blocking render. Only Inter is preloaded: it is the
+         face first paint waits on, and preloading Manrope too would put the two
+         in competition with the bundle for the same bandwidth. -->
+    <link rel="preload" href="/fonts/Inter.woff2" as="font" type="font/woff2" crossorigin />
+    <link rel="stylesheet" href="/fonts/fonts.css" />
+
+    <!-- Managed at runtime by usePageMeta and rewritten per route by the
+         prerender. The values here are the fallback for a route neither has
+         reached. -->
+    <title>TafutaKeja · Find your next place in Kenya</title>
+    <meta
+      name="description"
+      content="Houses and apartments to rent and for sale across Kenya: Nairobi, Mombasa, Kisumu, Nakuru and Eldoret. Browse verified listings by area, price and size."
+    />
+    <link rel="canonical" href="https://tafutakeja.netlify.app/" />
+    <meta property="og:site_name" content="TafutaKeja" />
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="TafutaKeja · Find your next place in Kenya" />
+    <meta property="og:url" content="https://tafutakeja.netlify.app/" />
+    <meta property="og:image" content="https://tafutakeja.netlify.app/og-default.jpg" />
+    <meta name="twitter:card" content="summary_large_image" />
+  </head>
+  <body>
+    <div id="root"></div>
+    <script type="module" src="/src/main.jsx"></script>
+  </body>
+</html>

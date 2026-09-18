@@ -1,0 +1,19 @@
+node_modules/
+.DS_Store
+
+# Env
+.env
+.env.local
+.env.*.local
+
+# Build output
+frontend/dist/
+frontend/.vite/
+
+# Uploads are user content, not source
+backend/public/uploads/*
+!backend/public/uploads/.gitkeep
+
+# Logs
+*.log
+npm-debug.log*
